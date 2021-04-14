@@ -92,25 +92,57 @@ namespace GlobalAlignment
         int n_equals = 0;
         int n_plus = 0;
         int n_minus = 0;
-        for (int i = 0; i < size; ++i) {
-            if (align_string[i] == '=') {
+
+        int cum_equal = 0;
+        int cum_minus = 0;
+        int cum_plus = 0;
+        for (int i = 0; i <= size; ++i)
+        {
+            if (align_string[i] == '=')
+            {
+                ++cum_equal;
+                if (cum_minus > 0)
+                    diff += std::to_string(cum_minus) + "-";
+                cum_minus = 0;
+                cum_plus = 0;
+
                 ++n_equals;
-                diff += align_string[i];
+                //diff += align_string[i];
             }
-            if (align_string[i] == '+') {
+            if (align_string[i] == '+')
+            {
+                ++cum_plus;
+                if (cum_equal > 0)
+                    diff += std::to_string(cum_equal) + "=";
+                if (cum_minus > 0)
+                    diff += std::to_string(cum_minus) + "-";
+                cum_minus = 0;
+                cum_equal = 0;
+
                 ++n_plus;
                 diff += align_string[i];
+                diff += data.second[n_equals + n_plus - 1];
             }
-            if (align_string[i] == '-') {
+            if (align_string[i] == '-')
+            {
+                ++cum_minus;
+                if (cum_equal > 0)
+                    diff += std::to_string(cum_equal) + "=";
+                cum_equal = 0;
+                cum_plus = 0;
+
                 ++n_minus;
-                diff += align_string[i];
+                //diff += align_string[i];
+            }
+            if (align_string[i] == '\0')
+            {
             }
         }
 
         delete[] data.first;
         delete[] data.second;
 
-        delete [] align_string;
+        delete[] align_string;
 
         return diff;
     }

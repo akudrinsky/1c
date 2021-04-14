@@ -40,7 +40,7 @@ namespace GlobalAlignment
         return first != second;
     }
 
-    // Just Needleman-Wunsh algorithm
+    // Just Hirschberg's algorithm
     // TODO: second is smaller
     std::string GetDiff(const char *first_filename, const char *second_filename)
     {

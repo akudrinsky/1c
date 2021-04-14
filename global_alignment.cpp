@@ -40,6 +40,55 @@ namespace GlobalAlignment
         return first != second;
     }
 
+    std::string RestoreByDiff(const char *first_filename, const char *second_filename)
+    {
+        std::pair<FILE *, FILE *> files;
+        std::pair<size_t, size_t> sizes;
+
+        sizes.first = GetFilesize(first_filename);
+        sizes.second = GetFilesize(second_filename);
+
+        files.first = fopen(first_filename, "rb");
+        files.second = fopen(second_filename, "rb");
+
+        std::pair<char *, char *> data;
+        data.first = new char[sizes.first + 1];
+        data.second = new char[sizes.second + 1];
+
+        fread(data.first, sizeof(char), sizes.first, files.first);
+        fread(data.second, sizeof(char), sizes.second, files.second);
+
+        data.first[sizes.first] = '\0';
+        data.second[sizes.second] = '\0';
+
+        std::string diff;
+
+        int iter1 = 0;
+        int iter2 = 0;
+        while (iter2 < sizes.second)
+        {
+            int n_letters = 0;
+            char oper = '\0';
+            int n_read = scanf("%d%c", &n_letters, &oper);
+            if (n_read > 0)
+            {
+                diff.append(n_letters, oper);
+            }
+            else
+            {
+                char letter = '\0';
+                scanf("%c%c", &oper, &letter);
+                diff += letter;
+            }
+            ++iter2;
+        }
+
+        delete[] data.first;
+        delete[] data.second;
+
+        return diff;
+    }
+
     // Just Hirschberg's algorithm
     // TODO: second is smaller
     std::string GetDiff(const char *first_filename, const char *second_filename)

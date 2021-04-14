@@ -9,4 +9,5 @@
 
 int main() {
     std::cout << GlobalAlignment::GetDiff("1.txt", "2.txt");
+    std::cout << GlobalAlignment::RestoreByDiff("1.txt", "diff.txt");
 }
